@@ -1,0 +1,76 @@
+.search-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 1rem;
+  
+    h2 {
+      margin-bottom: 1rem;
+      color: #333;
+    }
+  
+    .card {
+      background: #f8f9fa;
+      padding: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      border-radius: 5px;
+      margin-bottom: 1.5rem;
+    }
+  
+    .form-group {
+      margin-bottom: 1rem;
+  
+      label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        color: #444;
+      }
+  
+      .inline {
+        display: flex;
+        gap: 0.5rem;
+      }
+  
+      input[type="text"], select {
+        padding: 0.4rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        flex: 1; /* תופס מקום קיים */
+      }
+    }
+  
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+  
+      thead {
+        background: #eee;
+      }
+  
+      th, td {
+        text-align: left;
+        padding: 0.6rem;
+        border-bottom: 1px solid #ccc;
+      }
+    }
+  
+    .no-results {
+      text-align: center;
+      color: #888;
+      font-style: italic;
+    }
+  }
+  

@@ -1,0 +1,32 @@
+# docker-compose.yml
+version: '3.8'
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1433
+      - DB_USERNAME=your_user
+      - DB_PASSWORD=your_pass
+      - DB_NAME=northwind
+    depends_on:
+      - sqlserver
+
+  frontend:
+    build: ./Lcontrol_client
+
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"

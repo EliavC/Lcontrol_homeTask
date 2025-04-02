@@ -1,0 +1,62 @@
+<div class="search-container">
+    <h2></h2>
+  
+    <div class="card">
+      <div class="form-group">
+        <label>Company Name:</label>
+        <div class="inline">
+          <input type="text" [(ngModel)]="companyName"  />
+          <select [(ngModel)]="searchTypeCompany">
+            <option value="equal">Equal</option>
+            <option value="start">Starts With</option>
+            <option value="end">Ends With</option>
+            <option value="middle">Middle</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label>Contact Name:</label>
+        <div class="inline">
+          <input type="text" [(ngModel)]="contactName" />
+          <select [(ngModel)]="searchTypeContact">
+            <option value="equal">Equal</option>
+            <option value="start">Starts With</option>
+            <option value="end">Ends With</option>
+            <option value="middle">Middle</option>
+          </select>
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label>Phone:</label>
+        <input type="text" [(ngModel)]="phone" />
+      </div>
+  
+      <button (click)="doSearch()">Search</button>
+    </div>
+  
+    <table *ngIf="results && results.length" class="results-table">
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Contact</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Total Orders</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of results">
+          <td>{{ item.companyName }}</td>
+          <td>{{ item.contactName }}</td>
+          <td>{{ item.phone }}</td>
+          <td>{{ item.address }}</td>
+          <td>{{ item.totalOrders }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <p class="no-results" *ngIf="results && !results.length">No Results Available</p>
+  </div>
+  
