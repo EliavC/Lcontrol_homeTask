@@ -1,15 +1,17 @@
-# backend/Dockerfile
-FROM node:18
+# במקום זה (כנראה יש לך):
+# FROM node:18
 
-WORKDIR /app
+# שים:
+    FROM node:20
 
-COPY package*.json ./
-RUN npm install
-
-COPY . .
-
-RUN npm run build
-
-EXPOSE 3000
-
-CMD ["npm", "run", "start:prod"]
+    WORKDIR /app
+    
+    COPY package*.json ./
+    RUN npm install
+    
+    COPY . .
+    
+    RUN npm run build
+    
+    CMD ["npm", "run", "start:prod"]
+    

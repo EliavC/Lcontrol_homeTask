@@ -2,6 +2,14 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { NestApplicationOptions } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import * as crypto from 'crypto';
+
+if (!(global as any).crypto) {
+  (global as any).crypto = {
+    randomUUID: () => crypto.randomUUID()
+  };
+}
+
 
 async function bootstrap() {
   const appOptions: NestApplicationOptions = {

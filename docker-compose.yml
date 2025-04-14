@@ -1,32 +1,67 @@
-# docker-compose.yml
 version: '3.8'
+
 services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sqlserver
+    environment:
+      SA_PASSWORD: "My$trongP@ssw0rd123"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./sql-scripts:/sql-scripts
+    networks:
+      - app-network
+
+  sqlimporter:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: sqlimporter
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./sql-scripts:/sql-scripts
+    entrypoint: >
+      bash -c "
+      echo '⏳ Waiting for SQL Server to be ready...' &&
+      for i in {1..60}; do
+        /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'My$trongP@ssw0rd123' -Q 'SELECT 1' && break
+        echo 'Waiting...'
+        sleep 2
+      done &&
+      echo '✅ Creating DB...' &&
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'My$trongP@ssw0rd123' -i /sql-scripts/init.sql &&
+      echo '✅ Importing Northwind schema...' &&
+      /opt/mssql-tools/bin/sqlcmd -S sqlserver -U sa -P 'My$trongP@ssw0rd123' -d Northwind -i /sql-scripts/instnwnd.sql
+      "
+    networks:
+      - app-network
+
   backend:
     build: ./backend
     ports:
       - "3000:3000"
     environment:
-      - DB_HOST=host.docker.internal
+      - DB_HOST=sqlserver
       - DB_PORT=1433
-      - DB_USERNAME=sa
-      - DB_PASSWORD=MyStrongPassword
-      - DB_NAME=northwind
+      - DB_USER=sa
+      - DB_PASS=My$trongP@ssw0rd123
+      - DB_NAME=Northwind
+      - PORT=3000
     depends_on:
       - sqlserver
+      - sqlimporter
+    networks:
+      - app-network
 
   frontend:
     build: ./Lcontrol_client
-
     ports:
       - "4200:80"
     depends_on:
       - backend
+    networks:
+      - app-network
 
-  sqlserver:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    container_name: sqlserver
-    environment:
-      SA_PASSWORD: "MyStrongPassword"
-      ACCEPT_EULA: "Y"
-    ports:
-      - "1433:1433"
+networks:
+  app-network:
